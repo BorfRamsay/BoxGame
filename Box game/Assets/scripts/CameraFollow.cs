@@ -16,5 +16,10 @@ public class CameraFollow : MonoBehaviour
         tempVec3.y = this.transform.position.y;
         tempVec3.z = this.transform.position.z;
         this.transform.position = tempVec3;
+
+        
     }
+
+    
+
 }

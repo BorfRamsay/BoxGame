@@ -8,8 +8,7 @@ public class BackgroundScroller : MonoBehaviour
     public Rigidbody2D _rb2d;
     public BoxCollider2D _bc2d;
 
-    private float width;
-    private float scrollSpeed = -2f;
+   
 
     
 

@@ -13,7 +13,10 @@ public class Player : MonoBehaviour
     [SerializeField] private List<Transform> _groundCheckPoints = new List<Transform>();
 
     public float moveSpeed;
-
+    public GameObject deadExplosion;
+    private bool _isStanding = true;
+    [SerializeField] private float _laydownTimer = 0.1f;
+    private float _currentTimer = 0.0f;
 
 
     private void Awake()
@@ -37,14 +40,24 @@ public class Player : MonoBehaviour
 
 
 
-        //Box rotation
-        if (Input.GetKeyDown(KeyCode.J))
+        //Box rotation and timer for it
+        if ((Input.GetKeyDown(KeyCode.J)|| Input.GetKeyDown(KeyCode.H)) && _currentTimer <= 0)
         {
-            transform.eulerAngles = new Vector3(0, 0, 90);
+            if (_isStanding)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 0, 90);
+            }
+            _isStanding = !_isStanding;
+            _currentTimer = _laydownTimer;
         }
-        if (Input.GetKeyDown(KeyCode.K))
+
+        if (_currentTimer > 0)
         {
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            _currentTimer -= Time.deltaTime;
         }
     }
 
@@ -54,7 +67,7 @@ public class Player : MonoBehaviour
     }
 
 
-
+    //groundCheck
     private bool CheckGrounded()
     {
         _isGrounded = false;
@@ -75,10 +88,17 @@ public class Player : MonoBehaviour
         return false;
     }
 
-
-    
-
+    //Spike
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Spike")
+            dead();
+    }
   
-    
-
+    //death
+    void dead()
+    {
+        Instantiate(deadExplosion, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
 }
